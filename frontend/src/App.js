@@ -384,7 +384,7 @@ const RecipeFeed = ({ token }) => {
   );
 };
 
-const CreateRecipe = ({ token }) => {
+const MobileCreateRecipe = ({ token }) => {
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -393,8 +393,22 @@ const CreateRecipe = ({ token }) => {
     tags: ''
   });
   const [mediaFile, setMediaFile] = useState(null);
+  const [mediaPreview, setMediaPreview] = useState(null);
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
+
+  const handleMediaChange = (e) => {
+    const file = e.target.files[0];
+    setMediaFile(file);
+    
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = () => setMediaPreview(reader.result);
+      reader.readAsDataURL(file);
+    } else {
+      setMediaPreview(null);
+    }
+  };
 
   const addIngredient = () => {
     setFormData({
@@ -476,6 +490,7 @@ const CreateRecipe = ({ token }) => {
         tags: ''
       });
       setMediaFile(null);
+      setMediaPreview(null);
       
       setTimeout(() => setSuccess(false), 3000);
     } catch (error) {
@@ -486,137 +501,188 @@ const CreateRecipe = ({ token }) => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto py-8">
-      <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-        Share Your Recipe 👨‍🍳
-      </h2>
-
-      {success && (
-        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6 text-center">
-          Recipe shared successfully! 🎉
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Recipe Title</label>
-          <input
-            type="text"
-            value={formData.title}
-            onChange={(e) => setFormData({...formData, title: e.target.value})}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-            placeholder="e.g., Spicy Butter Chicken"
-            required
-          />
+    <div className="pb-20 px-4">
+      <div className="max-w-md mx-auto">
+        <div className="text-center py-6">
+          <div className="text-4xl mb-2">📹</div>
+          <h2 className="text-xl font-bold text-gray-800">Share Your Recipe</h2>
+          <p className="text-gray-600 text-sm">Create your cooking reel</p>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
-          <textarea
-            value={formData.description}
-            onChange={(e) => setFormData({...formData, description: e.target.value})}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-            rows="3"
-            placeholder="Tell us about your recipe..."
-            required
-          />
-        </div>
+        {success && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-xl mb-6 text-center text-sm">
+            Recipe shared successfully! 🎉
+          </div>
+        )}
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Photo or Video</label>
-          <input
-            type="file"
-            accept="image/*,video/*"
-            onChange={(e) => setMediaFile(e.target.files[0])}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-          />
-          <p className="text-sm text-gray-500 mt-1">Upload an image or video (max 60 seconds for videos)</p>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Ingredients</label>
-          {formData.ingredients.map((ingredient, index) => (
-            <div key={index} className="flex gap-2 mb-2">
-              <input
-                type="text"
-                value={ingredient}
-                onChange={(e) => updateIngredient(index, e.target.value)}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                placeholder={`Ingredient ${index + 1}`}
-              />
-              {formData.ingredients.length > 1 && (
-                <button
-                  type="button"
-                  onClick={() => removeIngredient(index)}
-                  className="px-3 py-2 text-red-500 hover:bg-red-50 rounded-lg"
-                >
-                  ✕
-                </button>
-              )}
-            </div>
-          ))}
-          <button
-            type="button"
-            onClick={addIngredient}
-            className="text-orange-600 hover:text-orange-700 text-sm font-medium"
-          >
-            + Add Ingredient
-          </button>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Instructions</label>
-          {formData.instructions.map((instruction, index) => (
-            <div key={index} className="flex gap-2 mb-2">
-              <div className="flex-shrink-0 w-8 h-8 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-sm font-bold mt-1">
-                {index + 1}
+        <form onSubmit={handleSubmit} className="space-y-6">
+          {/* Media Upload Section */}
+          <div className="bg-gray-50 rounded-2xl p-4">
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              📸 Add Photo or Video
+            </label>
+            
+            {!mediaPreview ? (
+              <div className="relative">
+                <input
+                  type="file"
+                  accept="image/*,video/*"
+                  onChange={handleMediaChange}
+                  className="absolute inset-0 w-full h-full opacity-0 cursor-pointer"
+                />
+                <div className="bg-white border-2 border-dashed border-gray-300 rounded-xl p-8 text-center">
+                  <div className="text-4xl mb-2">📷</div>
+                  <p className="text-sm text-gray-500">Tap to add photo or video</p>
+                  <p className="text-xs text-gray-400 mt-1">Max 60 seconds for videos</p>
+                </div>
               </div>
-              <textarea
-                value={instruction}
-                onChange={(e) => updateInstruction(index, e.target.value)}
-                className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                rows="2"
-                placeholder={`Step ${index + 1}`}
-              />
-              {formData.instructions.length > 1 && (
+            ) : (
+              <div className="relative">
+                {mediaFile?.type.startsWith('video/') ? (
+                  <video
+                    src={mediaPreview}
+                    controls
+                    className="w-full h-48 object-cover rounded-xl"
+                  />
+                ) : (
+                  <img
+                    src={mediaPreview}
+                    alt="Preview"
+                    className="w-full h-48 object-cover rounded-xl"
+                  />
+                )}
                 <button
                   type="button"
-                  onClick={() => removeInstruction(index)}
-                  className="px-3 py-2 text-red-500 hover:bg-red-50 rounded-lg flex-shrink-0 mt-1"
+                  onClick={() => {
+                    setMediaFile(null);
+                    setMediaPreview(null);
+                  }}
+                  className="absolute top-2 right-2 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm"
                 >
                   ✕
                 </button>
-              )}
-            </div>
-          ))}
+              </div>
+            )}
+          </div>
+
+          {/* Recipe Title */}
+          <div>
+            <input
+              type="text"
+              value={formData.title}
+              onChange={(e) => setFormData({...formData, title: e.target.value})}
+              className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-base"
+              placeholder="Recipe title (e.g., Spicy Butter Chicken)"
+              required
+            />
+          </div>
+
+          {/* Description */}
+          <div>
+            <textarea
+              value={formData.description}
+              onChange={(e) => setFormData({...formData, description: e.target.value})}
+              className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-base resize-none"
+              rows="3"
+              placeholder="Tell us about your recipe..."
+              required
+            />
+          </div>
+
+          {/* Ingredients */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-3">🥘 Ingredients</label>
+            {formData.ingredients.map((ingredient, index) => (
+              <div key={index} className="flex gap-2 mb-3">
+                <input
+                  type="text"
+                  value={ingredient}
+                  onChange={(e) => updateIngredient(index, e.target.value)}
+                  className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-base"
+                  placeholder={`Ingredient ${index + 1}`}
+                />
+                {formData.ingredients.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeIngredient(index)}
+                    className="px-3 py-3 text-red-500 hover:bg-red-50 rounded-xl"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={addIngredient}
+              className="text-orange-600 hover:text-orange-700 text-sm font-medium flex items-center"
+            >
+              <span className="mr-1">+</span> Add Ingredient
+            </button>
+          </div>
+
+          {/* Instructions */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-3">👨‍🍳 Instructions</label>
+            {formData.instructions.map((instruction, index) => (
+              <div key={index} className="flex gap-2 mb-3">
+                <div className="flex-shrink-0 w-8 h-8 bg-orange-100 text-orange-600 rounded-full flex items-center justify-center text-sm font-bold mt-2">
+                  {index + 1}
+                </div>
+                <textarea
+                  value={instruction}
+                  onChange={(e) => updateInstruction(index, e.target.value)}
+                  className="flex-1 px-4 py-3 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-base resize-none"
+                  rows="2"
+                  placeholder={`Step ${index + 1}`}
+                />
+                {formData.instructions.length > 1 && (
+                  <button
+                    type="button"
+                    onClick={() => removeInstruction(index)}
+                    className="px-3 py-3 text-red-500 hover:bg-red-50 rounded-xl flex-shrink-0 mt-2"
+                  >
+                    ✕
+                  </button>
+                )}
+              </div>
+            ))}
+            <button
+              type="button"
+              onClick={addInstruction}
+              className="text-orange-600 hover:text-orange-700 text-sm font-medium flex items-center"
+            >
+              <span className="mr-1">+</span> Add Step
+            </button>
+          </div>
+
+          {/* Tags */}
+          <div>
+            <input
+              type="text"
+              value={formData.tags}
+              onChange={(e) => setFormData({...formData, tags: e.target.value})}
+              className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-base"
+              placeholder="Tags: spicy, indian, chicken (comma separated)"
+            />
+          </div>
+
           <button
-            type="button"
-            onClick={addInstruction}
-            className="text-orange-600 hover:text-orange-700 text-sm font-medium"
+            type="submit"
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-orange-500 to-red-600 text-white py-4 rounded-xl font-semibold hover:from-orange-600 hover:to-red-700 transition-all disabled:opacity-50 text-base"
           >
-            + Add Step
+            {loading ? (
+              <div className="flex items-center justify-center">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                Sharing Recipe...
+              </div>
+            ) : (
+              'Share Recipe 🚀'
+            )}
           </button>
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Tags (optional)</label>
-          <input
-            type="text"
-            value={formData.tags}
-            onChange={(e) => setFormData({...formData, tags: e.target.value})}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-            placeholder="spicy, indian, chicken (comma separated)"
-          />
-        </div>
-
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-gradient-to-r from-orange-500 to-red-600 text-white py-3 rounded-lg font-semibold hover:from-orange-600 hover:to-red-700 transition-all disabled:opacity-50"
-        >
-          {loading ? 'Sharing Recipe...' : 'Share Recipe 🚀'}
-        </button>
-      </form>
+        </form>
+      </div>
     </div>
   );
 };
