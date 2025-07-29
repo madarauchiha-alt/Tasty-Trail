@@ -108,60 +108,69 @@ const AuthForm = ({ isLogin, setIsLogin, onAuth }) => {
   };
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center">
-      <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-md">
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-red-50 flex items-center justify-center p-4">
+      <div className="bg-white rounded-3xl shadow-2xl p-6 w-full max-w-sm">
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-orange-600 mb-2">🍽️ Tasty Trail</h1>
-          <p className="text-gray-600">Share recipes, discover restaurants</p>
+          <div className="text-5xl mb-3">🍽️</div>
+          <h1 className="text-2xl font-bold text-orange-600 mb-2">Tasty Trail</h1>
+          <p className="text-gray-600 text-sm">Share recipes, discover restaurants</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {!isLogin && (
             <>
-              <input
-                type="text"
-                placeholder="Username"
-                value={formData.username}
-                onChange={(e) => setFormData({...formData, username: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-                required
-              />
-              <input
-                type="text"
-                placeholder="Full Name (optional)"
-                value={formData.full_name}
-                onChange={(e) => setFormData({...formData, full_name: e.target.value})}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-              />
+              <div>
+                <input
+                  type="text"
+                  placeholder="Username"
+                  value={formData.username}
+                  onChange={(e) => setFormData({...formData, username: e.target.value})}
+                  className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-base"
+                  required
+                />
+              </div>
+              <div>
+                <input
+                  type="text"
+                  placeholder="Full Name (optional)"
+                  value={formData.full_name}
+                  onChange={(e) => setFormData({...formData, full_name: e.target.value})}
+                  className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-base"
+                />
+              </div>
             </>
           )}
           
-          <input
-            type="email"
-            placeholder="Email"
-            value={formData.email}
-            onChange={(e) => setFormData({...formData, email: e.target.value})}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-            required
-          />
+          <div>
+            <input
+              type="email"
+              placeholder="Email"
+              value={formData.email}
+              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-base"
+              required
+            />
+          </div>
           
-          <input
-            type="password"
-            placeholder="Password"
-            value={formData.password}
-            onChange={(e) => setFormData({...formData, password: e.target.value})}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-            required
-          />
+          <div>
+            <input
+              type="password"
+              placeholder="Password"
+              value={formData.password}
+              onChange={(e) => setFormData({...formData, password: e.target.value})}
+              className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-base"
+              required
+            />
+          </div>
 
           {error && (
-            <div className="text-red-500 text-sm text-center">{error}</div>
+            <div className="text-red-500 text-sm text-center bg-red-50 p-3 rounded-xl">{error}</div>
           )}
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gradient-to-r from-orange-500 to-red-600 text-white py-3 rounded-lg font-semibold hover:from-orange-600 hover:to-red-700 transition-all disabled:opacity-50"
+            className="w-full bg-gradient-to-r from-orange-500 to-red-600 text-white py-4 rounded-xl font-semibold hover:from-orange-600 hover:to-red-700 transition-all disabled:opacity-50 text-base"
           >
             {loading ? 'Loading...' : (isLogin ? 'Login' : 'Register')}
           </button>
@@ -170,7 +179,7 @@ const AuthForm = ({ isLogin, setIsLogin, onAuth }) => {
         <div className="text-center mt-6">
           <button
             onClick={() => setIsLogin(!isLogin)}
-            className="text-orange-600 hover:underline"
+            className="text-orange-600 hover:underline text-sm"
           >
             {isLogin ? "Don't have an account? Register" : "Already have an account? Login"}
           </button>
