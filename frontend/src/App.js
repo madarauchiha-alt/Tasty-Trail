@@ -189,9 +189,10 @@ const AuthForm = ({ isLogin, setIsLogin, onAuth }) => {
   );
 };
 
-const RecipeCard = ({ recipe, onLike, token }) => {
+const MobileRecipeCard = ({ recipe, onLike, token }) => {
   const [liked, setLiked] = useState(false);
   const [likes, setLikes] = useState(recipe.likes);
+  const [showFullDescription, setShowFullDescription] = useState(false);
   
   const handleLike = async () => {
     try {
@@ -206,102 +207,122 @@ const RecipeCard = ({ recipe, onLike, token }) => {
     }
   };
 
+  const handleDoubleTap = () => {
+    if (!liked) {
+      handleLike();
+    }
+  };
+
   return (
-    <div className="bg-white rounded-2xl shadow-lg overflow-hidden mb-6 transform hover:scale-[1.02] transition-all duration-300">
+    <div className="bg-white shadow-lg mb-4 mx-2 rounded-2xl overflow-hidden">
+      {/* User Header */}
+      <div className="flex items-center p-4 pb-2">
+        <div className="w-10 h-10 bg-gradient-to-r from-orange-400 to-red-500 rounded-full flex items-center justify-center text-white font-bold mr-3">
+          {recipe.username.charAt(0).toUpperCase()}
+        </div>
+        <div className="flex-1">
+          <h4 className="font-semibold text-sm">{recipe.username}</h4>
+          <p className="text-xs text-gray-500">{new Date(recipe.created_at).toLocaleDateString()}</p>
+        </div>
+        <button className="text-gray-400">
+          <span className="text-xl">⋯</span>
+        </button>
+      </div>
+
+      {/* Media Content */}
       {recipe.media_data && (
-        <div className="relative">
+        <div className="relative bg-black" onDoubleClick={handleDoubleTap}>
           {recipe.media_type === 'image' ? (
             <img
               src={`data:image/jpeg;base64,${recipe.media_data}`}
               alt={recipe.title}
-              className="w-full h-64 object-cover"
+              className="w-full h-80 object-cover"
             />
           ) : (
             <video
               src={`data:video/mp4;base64,${recipe.media_data}`}
               controls
-              className="w-full h-64 object-cover"
+              className="w-full h-80 object-cover"
+              playsInline
             />
           )}
+          
+          {/* Overlay Like Animation */}
+          <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
+            <div className={`text-6xl transition-all duration-300 ${liked ? 'scale-110 opacity-100' : 'scale-0 opacity-0'}`}>
+              ❤️
+            </div>
+          </div>
         </div>
       )}
-      
-      <div className="p-6">
-        <div className="flex items-center mb-4">
-          <div className="w-10 h-10 bg-gradient-to-r from-orange-400 to-red-500 rounded-full flex items-center justify-center text-white font-bold">
-            {recipe.username.charAt(0).toUpperCase()}
-          </div>
-          <div className="ml-3">
-            <h4 className="font-semibold">{recipe.username}</h4>
-            <p className="text-sm text-gray-500">{new Date(recipe.created_at).toLocaleDateString()}</p>
-          </div>
-        </div>
-        
-        <h3 className="text-xl font-bold mb-2">{recipe.title}</h3>
-        <p className="text-gray-600 mb-4">{recipe.description}</p>
-        
-        <div className="space-y-3">
-          <div>
-            <h5 className="font-semibold text-sm text-orange-600 mb-1">Ingredients:</h5>
-            <ul className="text-sm text-gray-600">
-              {recipe.ingredients.map((ingredient, index) => (
-                <li key={index} className="flex items-center">
-                  <span className="w-1 h-1 bg-orange-400 rounded-full mr-2"></span>
-                  {ingredient}
-                </li>
-              ))}
-            </ul>
-          </div>
-          
-          <div>
-            <h5 className="font-semibold text-sm text-orange-600 mb-1">Instructions:</h5>
-            <ol className="text-sm text-gray-600">
-              {recipe.instructions.map((instruction, index) => (
-                <li key={index} className="flex items-start mb-1">
-                  <span className="bg-orange-100 text-orange-600 rounded-full w-5 h-5 flex items-center justify-center text-xs font-bold mr-2 mt-0.5">
-                    {index + 1}
-                  </span>
-                  {instruction}
-                </li>
-              ))}
-            </ol>
-          </div>
-        </div>
-        
-        {recipe.tags.length > 0 && (
-          <div className="flex flex-wrap gap-2 mt-4">
-            {recipe.tags.map((tag, index) => (
-              <span
-                key={index}
-                className="bg-orange-100 text-orange-600 px-3 py-1 rounded-full text-xs font-medium"
-              >
-                #{tag}
+
+      {/* Action Buttons */}
+      <div className="px-4 py-3">
+        <div className="flex items-center justify-between mb-3">
+          <div className="flex items-center space-x-4">
+            <button
+              onClick={handleLike}
+              className="transition-transform active:scale-95"
+            >
+              <span className={`text-2xl ${liked ? '' : 'grayscale'}`}>
+                {liked ? '❤️' : '🤍'}
               </span>
-            ))}
+            </button>
+            <button className="transition-transform active:scale-95">
+              <span className="text-2xl">💬</span>
+            </button>
+            <button className="transition-transform active:scale-95">
+              <span className="text-2xl">📤</span>
+            </button>
           </div>
-        )}
-        
-        <div className="flex items-center justify-between mt-4 pt-4 border-t border-gray-100">
-          <button
-            onClick={handleLike}
-            className={`flex items-center space-x-2 px-4 py-2 rounded-full transition-all ${
-              liked ? 'bg-red-50 text-red-600' : 'hover:bg-gray-50'
-            }`}
-          >
-            <span className="text-xl">{liked ? '❤️' : '🤍'}</span>
-            <span className="font-semibold">{likes}</span>
+          <button className="transition-transform active:scale-95">
+            <span className="text-2xl">🔖</span>
           </button>
-          
-          <div className="flex space-x-4">
-            <button className="flex items-center space-x-1 text-gray-600 hover:text-orange-600">
-              <span>💬</span>
-              <span className="text-sm">{recipe.comments.length}</span>
-            </button>
-            <button className="flex items-center space-x-1 text-gray-600 hover:text-orange-600">
-              <span>📤</span>
-              <span className="text-sm">Share</span>
-            </button>
+        </div>
+
+        {/* Likes Count */}
+        <p className="font-semibold text-sm mb-2">{likes} likes</p>
+
+        {/* Recipe Content */}
+        <div className="space-y-2">
+          <div>
+            <span className="font-semibold text-sm mr-2">{recipe.username}</span>
+            <span className="text-sm font-bold">{recipe.title}</span>
           </div>
+          
+          <p className="text-sm text-gray-700">
+            {showFullDescription ? recipe.description : recipe.description.substring(0, 100)}
+            {recipe.description.length > 100 && (
+              <button
+                onClick={() => setShowFullDescription(!showFullDescription)}
+                className="text-orange-600 ml-1 font-medium"
+              >
+                {showFullDescription ? 'less' : '...more'}
+              </button>
+            )}
+          </p>
+
+          {/* Tags */}
+          {recipe.tags.length > 0 && (
+            <div className="flex flex-wrap gap-1 mt-2">
+              {recipe.tags.slice(0, 3).map((tag, index) => (
+                <span
+                  key={index}
+                  className="text-orange-600 text-sm font-medium"
+                >
+                  #{tag}
+                </span>
+              ))}
+              {recipe.tags.length > 3 && (
+                <span className="text-gray-500 text-sm">+{recipe.tags.length - 3} more</span>
+              )}
+            </div>
+          )}
+
+          {/* View Recipe Button */}
+          <button className="text-gray-500 text-sm font-medium mt-2">
+            View all {recipe.comments.length} comments
+          </button>
         </div>
       </div>
     </div>
