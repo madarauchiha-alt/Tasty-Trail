@@ -687,7 +687,7 @@ const MobileCreateRecipe = ({ token }) => {
   );
 };
 
-const RestaurantList = ({ userLocation }) => {
+const MobileRestaurantList = ({ userLocation }) => {
   const [restaurants, setRestaurants] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showNearby, setShowNearby] = useState(false);
@@ -720,44 +720,64 @@ const RestaurantList = ({ userLocation }) => {
   }
 
   return (
-    <div className="max-w-4xl mx-auto py-8">
-      <div className="flex items-center justify-between mb-8">
-        <h2 className="text-3xl font-bold bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-          Discover Places 🏪
-        </h2>
-        
-        {userLocation && (
-          <button
-            onClick={() => setShowNearby(!showNearby)}
-            className={`px-4 py-2 rounded-lg transition-all ${
-              showNearby
-                ? 'bg-orange-500 text-white'
-                : 'bg-orange-100 text-orange-600 hover:bg-orange-200'
-            }`}
-          >
-            {showNearby ? '📍 Nearby' : '🌍 All Places'}
-          </button>
-        )}
-      </div>
-
-      {restaurants.length === 0 ? (
-        <div className="text-center py-12">
-          <div className="text-6xl mb-4">🏪</div>
-          <h3 className="text-xl font-semibold text-gray-600">No restaurants found!</h3>
-          <p className="text-gray-500 mt-2">Be the first to add a restaurant</p>
+    <div className="pb-20 px-4">
+      <div className="max-w-md mx-auto">
+        <div className="text-center py-6">
+          <div className="text-4xl mb-2">🏪</div>
+          <h2 className="text-xl font-bold text-gray-800">Discover Places</h2>
+          
+          {userLocation && (
+            <div className="flex justify-center mt-4">
+              <div className="bg-gray-100 rounded-full p-1">
+                <button
+                  onClick={() => setShowNearby(false)}
+                  className={`px-4 py-2 rounded-full text-sm transition-all ${
+                    !showNearby
+                      ? 'bg-white text-gray-800 shadow-sm'
+                      : 'text-gray-600'
+                  }`}
+                >
+                  All Places
+                </button>
+                <button
+                  onClick={() => setShowNearby(true)}
+                  className={`px-4 py-2 rounded-full text-sm transition-all ${
+                    showNearby
+                      ? 'bg-white text-gray-800 shadow-sm'
+                      : 'text-gray-600'
+                  }`}
+                >
+                  📍 Nearby
+                </button>
+              </div>
+            </div>
+          )}
         </div>
-      ) : (
-        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {restaurants.map((restaurant) => (
-            <div key={restaurant.id} className="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-all duration-300">
-              <div className="p-6">
-                <div className="flex items-start justify-between mb-4">
-                  <div>
-                    <h3 className="text-xl font-bold mb-1">{restaurant.name}</h3>
-                    <p className="text-orange-600 text-sm font-medium">{restaurant.cuisine_type}</p>
+
+        {restaurants.length === 0 ? (
+          <div className="text-center py-20 px-4">
+            <div className="text-8xl mb-6">🏪</div>
+            <h3 className="text-xl font-semibold text-gray-600 mb-2">No restaurants found!</h3>
+            <p className="text-gray-500">Be the first to add a restaurant</p>
+            <div className="mt-6">
+              <span className="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm">
+                Tap the ➕ Add tab below to get started!
+              </span>
+            </div>
+          </div>
+        ) : (
+          <div className="space-y-4">
+            {restaurants.map((restaurant) => (
+              <div key={restaurant.id} className="bg-white rounded-2xl shadow-lg p-5">
+                <div className="flex items-start justify-between mb-3">
+                  <div className="flex-1">
+                    <h3 className="text-lg font-bold mb-1">{restaurant.name}</h3>
+                    <p className="text-orange-600 text-sm font-medium bg-orange-50 px-2 py-1 rounded-full inline-block">
+                      {restaurant.cuisine_type}
+                    </p>
                   </div>
-                  <div className="text-right">
-                    <div className="flex items-center">
+                  <div className="text-right ml-4">
+                    <div className="flex items-center justify-end mb-1">
                       {[...Array(5)].map((_, i) => (
                         <span
                           key={i}
@@ -771,30 +791,30 @@ const RestaurantList = ({ userLocation }) => {
                         </span>
                       ))}
                     </div>
-                    <p className="text-sm text-gray-500">{restaurant.total_reviews} reviews</p>
+                    <p className="text-xs text-gray-500">{restaurant.total_reviews} reviews</p>
                   </div>
                 </div>
                 
-                <p className="text-gray-600 mb-3">{restaurant.description}</p>
+                <p className="text-gray-600 text-sm mb-3">{restaurant.description}</p>
                 
-                <div className="flex items-center text-sm text-gray-500 mb-4">
+                <div className="flex items-center text-xs text-gray-500 mb-4">
                   <span className="mr-1">📍</span>
-                  <span>{restaurant.address}</span>
+                  <span className="flex-1">{restaurant.address}</span>
                 </div>
                 
-                <button className="w-full bg-gradient-to-r from-orange-500 to-red-600 text-white py-2 rounded-lg hover:from-orange-600 hover:to-red-700 transition-all">
+                <button className="w-full bg-gradient-to-r from-orange-500 to-red-600 text-white py-3 rounded-xl font-semibold hover:from-orange-600 hover:to-red-700 transition-all text-sm">
                   View Reviews & Add Review
                 </button>
               </div>
-            </div>
-          ))}
-        </div>
-      )}
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
 
-const AddRestaurant = ({ token, userLocation }) => {
+const MobileAddRestaurant = ({ token, userLocation }) => {
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -858,108 +878,115 @@ const AddRestaurant = ({ token, userLocation }) => {
   };
 
   return (
-    <div className="max-w-2xl mx-auto py-8">
-      <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-        Add New Place 🏪
-      </h2>
-
-      {success && (
-        <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6 text-center">
-          Restaurant added successfully! 🎉
-        </div>
-      )}
-
-      <form onSubmit={handleSubmit} className="bg-white rounded-2xl shadow-lg p-8 space-y-6">
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Restaurant Name</label>
-          <input
-            type="text"
-            value={formData.name}
-            onChange={(e) => setFormData({...formData, name: e.target.value})}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-            placeholder="e.g., Mumbai Street Food"
-            required
-          />
+    <div className="pb-20 px-4">
+      <div className="max-w-md mx-auto">
+        <div className="text-center py-6">
+          <div className="text-4xl mb-2">➕</div>
+          <h2 className="text-xl font-bold text-gray-800">Add New Place</h2>
+          <p className="text-gray-600 text-sm">Share your food discovery</p>
         </div>
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Description</label>
-          <textarea
-            value={formData.description}
-            onChange={(e) => setFormData({...formData, description: e.target.value})}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-            rows="3"
-            placeholder="Tell us about this place..."
-            required
-          />
-        </div>
+        {success && (
+          <div className="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded-xl mb-6 text-center text-sm">
+            Restaurant added successfully! 🎉
+          </div>
+        )}
 
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Cuisine Type</label>
-          <input
-            type="text"
-            value={formData.cuisine_type}
-            onChange={(e) => setFormData({...formData, cuisine_type: e.target.value})}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-            placeholder="e.g., Indian, Chinese, Street Food"
-            required
-          />
-        </div>
-
-        <div>
-          <label className="block text-sm font-medium text-gray-700 mb-2">Address</label>
-          <textarea
-            value={formData.address}
-            onChange={(e) => setFormData({...formData, address: e.target.value})}
-            className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
-            rows="2"
-            placeholder="Full address of the restaurant"
-            required
-          />
-        </div>
-
-        <div className="grid grid-cols-2 gap-4">
+        <form onSubmit={handleSubmit} className="space-y-6">
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Latitude</label>
             <input
-              type="number"
-              step="any"
-              value={formData.latitude}
-              onChange={(e) => setFormData({...formData, latitude: e.target.value})}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+              type="text"
+              value={formData.name}
+              onChange={(e) => setFormData({...formData, name: e.target.value})}
+              className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-base"
+              placeholder="Restaurant name (e.g., Mumbai Street Food)"
               required
             />
           </div>
-          
+
           <div>
-            <label className="block text-sm font-medium text-gray-700 mb-2">Longitude</label>
-            <input
-              type="number"
-              step="any"
-              value={formData.longitude}
-              onChange={(e) => setFormData({...formData, longitude: e.target.value})}
-              className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent"
+            <textarea
+              value={formData.description}
+              onChange={(e) => setFormData({...formData, description: e.target.value})}
+              className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-base resize-none"
+              rows="3"
+              placeholder="Tell us about this place..."
               required
             />
           </div>
-        </div>
 
-        <button
-          type="button"
-          onClick={useCurrentLocation}
-          className="w-full bg-blue-500 text-white py-2 rounded-lg hover:bg-blue-600 transition-all mb-4"
-        >
-          📍 Use Current Location
-        </button>
+          <div>
+            <input
+              type="text"
+              value={formData.cuisine_type}
+              onChange={(e) => setFormData({...formData, cuisine_type: e.target.value})}
+              className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-base"
+              placeholder="Cuisine type (e.g., Indian, Chinese, Street Food)"
+              required
+            />
+          </div>
 
-        <button
-          type="submit"
-          disabled={loading}
-          className="w-full bg-gradient-to-r from-orange-500 to-red-600 text-white py-3 rounded-lg font-semibold hover:from-orange-600 hover:to-red-700 transition-all disabled:opacity-50"
-        >
-          {loading ? 'Adding Restaurant...' : 'Add Restaurant 🚀'}
-        </button>
-      </form>
+          <div>
+            <textarea
+              value={formData.address}
+              onChange={(e) => setFormData({...formData, address: e.target.value})}
+              className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-base resize-none"
+              rows="2"
+              placeholder="Full address of the restaurant"
+              required
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <input
+                type="number"
+                step="any"
+                value={formData.latitude}
+                onChange={(e) => setFormData({...formData, latitude: e.target.value})}
+                className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-base"
+                placeholder="Latitude"
+                required
+              />
+            </div>
+            
+            <div>
+              <input
+                type="number"
+                step="any"
+                value={formData.longitude}
+                onChange={(e) => setFormData({...formData, longitude: e.target.value})}
+                className="w-full px-4 py-4 border border-gray-300 rounded-xl focus:ring-2 focus:ring-orange-500 focus:border-transparent text-base"
+                placeholder="Longitude"
+                required
+              />
+            </div>
+          </div>
+
+          <button
+            type="button"
+            onClick={useCurrentLocation}
+            className="w-full bg-blue-500 text-white py-3 rounded-xl font-semibold hover:bg-blue-600 transition-all text-base"
+          >
+            📍 Use Current Location
+          </button>
+
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full bg-gradient-to-r from-orange-500 to-red-600 text-white py-4 rounded-xl font-semibold hover:from-orange-600 hover:to-red-700 transition-all disabled:opacity-50 text-base"
+          >
+            {loading ? (
+              <div className="flex items-center justify-center">
+                <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
+                Adding Restaurant...
+              </div>
+            ) : (
+              'Add Restaurant 🚀'
+            )}
+          </button>
+        </form>
+      </div>
     </div>
   );
 };
@@ -1016,19 +1043,16 @@ function App() {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <Navigation 
-        user={user} 
-        setActiveTab={setActiveTab} 
-        activeTab={activeTab}
-        onLogout={handleLogout} 
-      />
+      <MobileHeader user={user} onLogout={handleLogout} />
       
-      <main className="container mx-auto px-4">
+      <main className="min-h-screen">
         {activeTab === 'feed' && <RecipeFeed token={token} />}
-        {activeTab === 'create-recipe' && <CreateRecipe token={token} />}
-        {activeTab === 'restaurants' && <RestaurantList userLocation={userLocation} />}
-        {activeTab === 'add-restaurant' && <AddRestaurant token={token} userLocation={userLocation} />}
+        {activeTab === 'create-recipe' && <MobileCreateRecipe token={token} />}
+        {activeTab === 'restaurants' && <MobileRestaurantList userLocation={userLocation} />}
+        {activeTab === 'add-restaurant' && <MobileAddRestaurant token={token} userLocation={userLocation} />}
       </main>
+
+      <MobileBottomNav activeTab={activeTab} setActiveTab={setActiveTab} />
     </div>
   );
 }

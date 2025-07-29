@@ -2,6 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Mobile-first responsive design */
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
@@ -9,41 +10,51 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  font-size: 16px;
+  line-height: 1.6;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* Mobile touch improvements */
+* {
+  -webkit-tap-highlight-color: transparent;
+  box-sizing: border-box;
 }
 
-/* Custom scrollbar for recipe cards */
-.overflow-y-auto::-webkit-scrollbar {
-  width: 4px;
+/* Disable zoom on input fields on mobile */
+input[type="text"], 
+input[type="email"], 
+input[type="password"], 
+input[type="number"],
+textarea, 
+select {
+  font-size: 16px;
+  -webkit-appearance: none;
+  border-radius: 12px;
 }
 
-.overflow-y-auto::-webkit-scrollbar-track {
-  background: #f1f1f1;
-  border-radius: 10px;
+/* Custom scrollbar for mobile */
+::-webkit-scrollbar {
+  width: 2px;
 }
 
-.overflow-y-auto::-webkit-scrollbar-thumb {
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
   background: #fb923c;
   border-radius: 10px;
 }
 
-.overflow-y-auto::-webkit-scrollbar-thumb:hover {
-  background: #f97316;
-}
-
-/* Custom animations */
+/* Mobile-specific animations */
 .animate-fade-in {
-  animation: fadeIn 0.5s ease-in-out;
+  animation: mobileSlideUp 0.3s ease-out;
 }
 
-@keyframes fadeIn {
+@keyframes mobileSlideUp {
   from {
     opacity: 0;
-    transform: translateY(10px);
+    transform: translateY(20px);
   }
   to {
     opacity: 1;
@@ -51,235 +62,325 @@ code {
   }
 }
 
-/* Video styling for recipe cards */
-video {
-  border-radius: 0.5rem;
+/* Touch-friendly button states */
+button:active {
+  transform: scale(0.98);
+  transition: transform 0.1s ease;
 }
 
-/* Enhanced focus states */
-.focus\:ring-orange-500:focus {
-  box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.1);
-}
-
-/* Custom gradient text */
-.bg-gradient-to-r.from-orange-600.to-red-600.bg-clip-text.text-transparent {
-  background: linear-gradient(to right, #ea580c, #dc2626);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-}
-
-/* Loading animation enhancement */
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-/* Enhanced card hover effects */
-.hover\:scale-\[1\.02\]:hover {
-  transform: scale(1.02);
-}
-
-/* Mobile responsive improvements */
-@media (max-width: 768px) {
-  .container {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-  
-  .grid {
-    grid-template-columns: 1fr;
-  }
-  
-  .md\:grid-cols-2 {
-    grid-template-columns: 1fr;
-  }
-  
-  .lg\:grid-cols-3 {
-    grid-template-columns: 1fr;
-  }
-}
-
-/* Enhanced form styling */
-input[type="file"] {
-  file-selector-button: {
-    background: linear-gradient(to right, #fb923c, #f97316);
-    border: none;
-    padding: 0.5rem 1rem;
-    border-radius: 0.5rem;
-    color: white;
-    cursor: pointer;
-    margin-right: 1rem;
-  }
-}
-
-/* Recipe card media styling */
-.recipe-media {
-  position: relative;
-  overflow: hidden;
-}
-
-.recipe-media img,
-.recipe-media video {
-  transition: transform 0.3s ease;
-}
-
-.recipe-media:hover img,
-.recipe-media:hover video {
-  transform: scale(1.05);
-}
-
-/* Tag styling */
-.tag {
-  transition: all 0.2s ease;
-}
-
-.tag:hover {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 8px rgba(251, 146, 60, 0.2);
-}
-
-/* Navigation improvements */
-.nav-button {
-  position: relative;
-  overflow: hidden;
-}
-
-.nav-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
-}
-
-.nav-button:hover::before {
-  left: 100%;
-}
-
-/* Enhanced button styling */
-.btn-primary {
-  background: linear-gradient(45deg, #fb923c, #f97316);
-  border: none;
-  color: white;
-  font-weight: 600;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.75rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(251, 146, 60, 0.3);
-}
-
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(251, 146, 60, 0.4);
-}
-
-.btn-primary:active {
-  transform: translateY(0);
-}
-
-/* Recipe instruction numbering */
-.instruction-number {
-  background: linear-gradient(45deg, #fb923c, #f97316);
-  color: white;
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.75rem;
-  font-weight: bold;
-  margin-right: 0.75rem;
-  margin-top: 0.125rem;
-  flex-shrink: 0;
-}
-
-/* Star rating styling */
-.star-rating {
-  display: flex;
-  align-items: center;
-  gap: 0.125rem;
-}
-
-.star-rating .star {
-  font-size: 1.25rem;
-  transition: all 0.2s ease;
-}
-
-.star-rating .star.filled {
-  color: #fbbf24;
-  text-shadow: 0 0 10px rgba(251, 191, 36, 0.5);
-}
-
-.star-rating .star.empty {
-  color: #d1d5db;
-}
-
-/* Location button styling */
-.location-btn {
-  background: linear-gradient(45deg, #3b82f6, #2563eb);
-  border: none;
-  color: white;
-  font-weight: 600;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.75rem;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
-}
-
-.location-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(59, 130, 246, 0.4);
-}
-
-/* Enhanced responsive design */
-@media (max-width: 640px) {
-  .text-3xl {
-    font-size: 1.875rem;
-  }
-  
-  .text-2xl {
-    font-size: 1.5rem;
-  }
-  
-  .px-8 {
-    padding-left: 1rem;
-    padding-right: 1rem;
-  }
-  
-  .py-8 {
-    padding-top: 2rem;
-    padding-bottom: 2rem;
-  }
-}
-
-/* Custom utility classes */
+/* Enhanced mobile gradient text */
 .text-gradient {
   background: linear-gradient(45deg, #fb923c, #f97316);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+  color: transparent;
 }
 
-.shadow-custom {
-  box-shadow: 0 10px 40px rgba(251, 146, 60, 0.1);
+/* Mobile card shadows */
+.mobile-card-shadow {
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
 }
 
-.border-gradient {
-  border: 2px solid;
-  border-image: linear-gradient(45deg, #fb923c, #f97316) 1;
+/* Double tap prevention */
+.no-double-tap {
+  touch-action: manipulation;
+}
+
+/* Video player mobile optimizations */
+video {
+  max-width: 100%;
+  height: auto;
+  border-radius: 16px;
+}
+
+video::-webkit-media-controls-panel {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Mobile form improvements */
+.mobile-form-input {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+  border: 2px solid #e5e7eb;
+  border-radius: 16px;
+  padding: 16px;
+  font-size: 16px;
+  transition: all 0.2s ease;
+  background-color: white;
+}
+
+.mobile-form-input:focus {
+  outline: none;
+  border-color: #fb923c;
+  box-shadow: 0 0 0 3px rgba(251, 146, 60, 0.1);
+}
+
+/* Mobile navigation improvements */
+.mobile-nav-item {
+  padding: 12px;
+  min-height: 60px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  transition: all 0.2s ease;
+}
+
+.mobile-nav-item:active {
+  background-color: rgba(251, 146, 60, 0.1);
+  border-radius: 12px;
+}
+
+/* Enhanced loading animations */
+.mobile-loader {
+  width: 40px;
+  height: 40px;
+  border: 3px solid #f3f4f6;
+  border-top: 3px solid #fb923c;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Mobile-specific photo upload area */
+.mobile-photo-upload {
+  border: 2px dashed #d1d5db;
+  border-radius: 16px;
+  padding: 32px 16px;
+  text-align: center;
+  background: #fafafa;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+
+.mobile-photo-upload:hover,
+.mobile-photo-upload:active {
+  border-color: #fb923c;
+  background-color: #fff7ed;
+}
+
+/* Recipe card mobile optimizations */
+.mobile-recipe-card {
+  margin: 0 16px 16px 16px;
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  background: white;
+}
+
+/* Mobile action buttons */
+.mobile-action-btn {
+  min-width: 44px;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+  border-radius: 50%;
+}
+
+.mobile-action-btn:active {
+  transform: scale(0.9);
+  background-color: rgba(0, 0, 0, 0.05);
+}
+
+/* Mobile restaurant card */
+.mobile-restaurant-card {
+  background: white;
+  border-radius: 20px;
+  padding: 20px;
+  margin-bottom: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+}
+
+/* Like animation for mobile */
+.mobile-like-animation {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0);
+  transition: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.mobile-like-animation.active {
+  transform: translate(-50%, -50%) scale(1.2);
+  opacity: 1;
+}
+
+/* Mobile media preview */
+.mobile-media-preview {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #000;
+}
+
+.mobile-media-preview img,
+.mobile-media-preview video {
+  width: 100%;
+  height: 320px;
+  object-fit: cover;
+}
+
+/* Mobile bottom sheet style */
+.mobile-bottom-sheet {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: white;
+  border-radius: 20px 20px 0 0;
+  box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.15);
+  z-index: 1000;
+}
+
+/* Mobile safe areas */
+@supports (padding: max(0px)) {
+  .mobile-safe-area-bottom {
+    padding-bottom: max(20px, env(safe-area-inset-bottom));
+  }
+  
+  .mobile-safe-area-top {
+    padding-top: max(16px, env(safe-area-inset-top));
+  }
+}
+
+/* Prevent overscroll on mobile */
+body {
+  overscroll-behavior: none;
+}
+
+/* Mobile typography improvements */
+.mobile-title {
+  font-size: 1.25rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.mobile-subtitle {
+  font-size: 0.875rem;
+  color: #6b7280;
+  line-height: 1.4;
+}
+
+/* Mobile button improvements */
+.mobile-primary-btn {
+  background: linear-gradient(135deg, #fb923c, #f97316);
+  color: white;
+  font-weight: 600;
+  padding: 16px 24px;
+  border-radius: 16px;
+  border: none;
+  font-size: 16px;
+  width: 100%;
+  min-height: 56px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(251, 146, 60, 0.3);
+}
+
+.mobile-primary-btn:active {
+  transform: translateY(2px);
+  box-shadow: 0 2px 8px rgba(251, 146, 60, 0.3);
+}
+
+.mobile-primary-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+/* Mobile input improvements */
+.mobile-input-group {
+  margin-bottom: 20px;
+}
+
+.mobile-input-group label {
+  display: block;
+  font-weight: 500;
+  color: #374151;
+  margin-bottom: 8px;
+  font-size: 14px;
+}
+
+/* Fix for iOS safari input zoom */
+@media screen and (-webkit-min-device-pixel-ratio: 0) {
+  select,
+  textarea,
+  input[type="text"],
+  input[type="email"],
+  input[type="password"],
+  input[type="datetime"],
+  input[type="datetime-local"],
+  input[type="date"],
+  input[type="month"],
+  input[type="time"],
+  input[type="week"],
+  input[type="number"],
+  input[type="url"],
+  input[type="search"],
+  input[type="tel"],
+  input[type="color"] {
+    font-size: 16px !important;
+  }
+}
+
+/* Mobile landscape optimizations */
+@media screen and (orientation: landscape) and (max-height: 500px) {
+  .mobile-header {
+    padding: 8px 16px;
+  }
+  
+  .mobile-nav-item {
+    min-height: 50px;
+    padding: 8px;
+  }
+  
+  .mobile-form-spacing {
+    margin-bottom: 12px;
+  }
+}
+
+/* Dark mode support for mobile */
+@media (prefers-color-scheme: dark) {
+  .mobile-card {
+    background-color: #1f2937;
+    color: white;
+  }
+  
+  .mobile-input {
+    background-color: #374151;
+    border-color: #4b5563;
+    color: white;
+  }
+}
+
+/* Accessibility improvements for mobile */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+  .mobile-form-input {
+    border-width: 3px;
+  }
+  
+  .mobile-primary-btn {
+    border: 2px solid #000;
+  }
 }
