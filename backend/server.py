@@ -286,7 +286,15 @@ async def like_recipe(recipe_id: str, token: str = Form(...)):
 
 # Restaurant Routes
 @api_router.post("/restaurants", response_model=Restaurant)
-async def create_restaurant(restaurant: RestaurantCreate, token: str = Form(...)):
+async def create_restaurant(
+    name: str = Form(...),
+    description: str = Form(...),
+    cuisine_type: str = Form(...),
+    address: str = Form(...),
+    latitude: float = Form(...),
+    longitude: float = Form(...),
+    token: str = Form(...)
+):
     # Verify user
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
@@ -297,8 +305,15 @@ async def create_restaurant(restaurant: RestaurantCreate, token: str = Form(...)
     except JWTError:
         raise HTTPException(status_code=401, detail="Invalid authentication")
     
-    restaurant_data = restaurant.dict()
-    restaurant_data["added_by"] = user["id"]
+    restaurant_data = {
+        "name": name,
+        "description": description,
+        "cuisine_type": cuisine_type,
+        "address": address,
+        "latitude": latitude,
+        "longitude": longitude,
+        "added_by": user["id"]
+    }
     restaurant_obj = Restaurant(**restaurant_data)
     
     await db.restaurants.insert_one(restaurant_obj.dict())
