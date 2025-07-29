@@ -357,21 +357,22 @@ const RecipeFeed = ({ token }) => {
   }
 
   return (
-    <div className="max-w-2xl mx-auto py-8">
-      <h2 className="text-3xl font-bold text-center mb-8 bg-gradient-to-r from-orange-600 to-red-600 bg-clip-text text-transparent">
-        Recipe Feed 🍳
-      </h2>
-      
+    <div className="pb-20">
       {recipes.length === 0 ? (
-        <div className="text-center py-12">
-          <div className="text-6xl mb-4">🍽️</div>
-          <h3 className="text-xl font-semibold text-gray-600">No recipes yet!</h3>
-          <p className="text-gray-500 mt-2">Be the first to share a delicious recipe</p>
+        <div className="text-center py-20 px-4">
+          <div className="text-8xl mb-6">🍽️</div>
+          <h3 className="text-xl font-semibold text-gray-600 mb-2">No recipes yet!</h3>
+          <p className="text-gray-500">Be the first to share a delicious recipe</p>
+          <div className="mt-6">
+            <span className="inline-block bg-orange-100 text-orange-600 px-4 py-2 rounded-full text-sm">
+              Tap the 📹 Share tab below to get started!
+            </span>
+          </div>
         </div>
       ) : (
-        <div>
+        <div className="max-w-md mx-auto">
           {recipes.map((recipe) => (
-            <RecipeCard
+            <MobileRecipeCard
               key={recipe.id}
               recipe={recipe}
               token={token}
